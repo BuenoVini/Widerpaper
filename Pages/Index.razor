@@ -6,4 +6,18 @@
 
 Welcome to your new app.
 
+@* <img src="Uploads/target.jpg" class="img-fluid" alt="..."> *@
+
 <SurveyPrompt Title="How is Blazor working for you?"/>
+
+Import your files: 
+
+<InputFile OnChange="LoadImage"></InputFile>
+
+@code {
+    private async Task LoadImage(InputFileChangeEventArgs e)
+    {
+        await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
+        await e.File.OpenReadStream(5 * 1024 * 1024).CopyToAsync(stream);
+    }
+}
