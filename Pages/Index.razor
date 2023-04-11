@@ -1,38 +1,13 @@
-﻿@page "/"
+﻿@using Widerpaper.Components
+
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
-<div class="text-center border border-4 rounded-3 @_boxColor">
-    <p>Drag an image here or click this box to select one to upload.</p>
-    
-    @if (_imageSelected == false)
-    {
-        <InputFile class="p-5 drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter"/>
-    }
-    else
-    {
-        @* <img src="Uploads/target.jpg" class="img-fluid" alt="Image uploaded by the user."/> *@
-        <h1>Image being processed, hold on...</h1>
-    }
-</div>
+<DragDropUploader />
 
 @code {
-        private const string DefaultColor = "border-info";
-        private const string ActiveColor = "border-primary";
-
-    private string _boxColor = DefaultColor;
-    private bool _imageSelected;
-
-    private void HandleDragEnter() => _boxColor = ActiveColor;
-    
-    private async Task LoadImage(InputFileChangeEventArgs e)
-    {
-        await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
-        await e.File.OpenReadStream(5 * 1024 * 1024).CopyToAsync(stream);
-
-        _boxColor = DefaultColor;
-        _imageSelected = true;
-    }
+        
 }
