@@ -2,8 +2,6 @@
 
 html, body {
     font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: lightskyblue;
-    color: darkslateblue;
 }
 
 h1:focus {
