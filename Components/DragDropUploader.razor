@@ -1,13 +1,13 @@
 <div id="display-drop-area" class="mt-5" style="position: relative;">
-    @if (_imageSelected == false)
+    @if (_isImageSelected == false)
     {
         <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter"/>
         
         <div style="z-index: -1; position: absolute;">
-            <i class="bi bi-image text-light" style="font-size: 7.5em;"></i>
+            <i class="bi @_icon text-light" style="font-size: 7.5em;"></i>
             @* <button type="button" class="btn btn-primary align-self-center mb-2">Browse</button> *@
             <p class="text-muted">
-                <span class="text-primary fw-bold">Click to browse</span> or drag an image here
+                <span class="@_linkColor fw-bold">Click to browse</span> or drag an image here
             </p>
         </div>
     }
@@ -19,20 +19,29 @@
 </div>
 
 @code {
-        private const string DefaultColor = "border-info";
-        private const string ActiveColor = "border-primary";
+    /* TODO: make the const an enum */
+        private const string DefaultColor = "text-primary";
+        private const string ActiveColor = "text-info";
+        private const string DefaultIcon = "bi-image";
+        private const string ActiveIcon = "bi-cloud-arrow-up-fill";
 
-    private string _boxColor = DefaultColor;
-    private bool _imageSelected;
+    private string _linkColor = DefaultColor;
+    private string _icon = DefaultIcon;
+    private bool _isImageSelected;
 
-    private void HandleDragEnter() => _boxColor = ActiveColor;
+    private void HandleDragEnter()
+    {
+        _linkColor = ActiveColor;
+        _icon = ActiveIcon;
+    }
     
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
         await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
         await e.File.OpenReadStream(5 * 1024 * 1024).CopyToAsync(stream);
 
-        _boxColor = DefaultColor;
-        _imageSelected = true;
+        _linkColor = DefaultColor;
+        _icon = DefaultIcon;
+        _isImageSelected = true;
     }
 }
