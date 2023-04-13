@@ -35,8 +35,8 @@
     class Color : State { public Color(string @default, string active) : base(@default, active) {} }
     class Icon : State { public Icon(string @default, string active) : base(@default, active) {} }
 
-    private Color _color = new ("text-primary", "text-info"); 
-    private Icon _icon = new ("bi-image", "bi-cloud-arrow-up-fill");
+    private readonly Color _color = new ("text-primary", "text-info"); 
+    private readonly Icon _icon = new ("bi-image", "bi-cloud-arrow-up-fill");
     
     private string _linkColor = "";
     private string _imgIcon = "";
