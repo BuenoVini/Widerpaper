@@ -1,9 +1,15 @@
-<div class="text-center border border-4 rounded-3 @_boxColor">
-    <p>Drag an image here or click this box to select one to upload.</p>
-    
+<div id="display-drop-area" class="mt-5" style="position: relative;">
     @if (_imageSelected == false)
     {
-        <InputFile class="p-5 drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter"/>
+        <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter"/>
+        
+        <div style="z-index: -1; position: absolute;">
+            <i class="bi bi-image text-light" style="font-size: 7.5em;"></i>
+            @* <button type="button" class="btn btn-primary align-self-center mb-2">Browse</button> *@
+            <p class="text-muted">
+                <span class="text-primary fw-bold">Click to browse</span> or drag an image here
+            </p>
+        </div>
     }
     else
     {
