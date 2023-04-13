@@ -1,7 +1,7 @@
 <div id="display-drop-area" class="mt-5" style="position: relative;">
     @if (_isImageSelected == false)
     {
-        <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter"/>
+        <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
         
         <div style="z-index: -1; position: absolute;">
             <i class="bi @_imgIcon text-light" style="font-size: 7.5em;"></i>
@@ -42,16 +42,18 @@
     private string _imgIcon = "";
     private bool _isImageSelected;
 
-    protected override void OnInitialized()
-    {
-        _linkColor = _color.Default;
-        _imgIcon = _icon.Default;
-    }
+    protected override void OnInitialized() => HandleDragLeave();
 
     private void HandleDragEnter()
     {
         _linkColor = _color.Active;
         _imgIcon = _icon.Active;
+    }
+
+    private void HandleDragLeave()
+    {
+        _linkColor = _color.Default;
+        _imgIcon = _icon.Default;
     }
     
     private async Task LoadImage(InputFileChangeEventArgs e)
