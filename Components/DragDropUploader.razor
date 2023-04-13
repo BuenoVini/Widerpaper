@@ -18,8 +18,12 @@
     }
     else
     {
-        @* <img src="Uploads/target.jpg" class="img-fluid" alt="Image uploaded by the user."/> *@
-        <h1>Image being processed, hold on...</h1>
+        <div>
+            <h3 class="mb-4 text-muted">Your image is being processed,<br>please hold on...</h3>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     }
 </div>
 
