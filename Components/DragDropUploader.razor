@@ -1,14 +1,19 @@
 <div id="display-drop-area" class="mt-5" style="position: relative;">
-    @if (_isImageSelected == false)
+    @if (_isImageUploaded == false)
     {
         <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
         
-        <div style="z-index: -1; position: absolute;">
+        <div class="text-muted" style="z-index: -1; position: absolute;">
             <i class="bi @_imgIcon text-light" style="font-size: 7.5em;"></i>
             @* <button type="button" class="btn btn-primary align-self-center mb-2">Browse</button> *@
-            <p class="text-muted">
-                <span class="@_linkColor fw-bold">Click to browse</span> or drag an image here
-            </p>
+            @if (_isDraggingImage == false)
+            {
+                <p><span class="@_linkColor fw-bold">Click to browse</span> or drag an image here</p>
+            }
+            else
+            {
+                <p>Drop the image to upload it</p>
+            }
         </div>
     }
     else
@@ -40,7 +45,9 @@
     
     private string _linkColor = "";
     private string _imgIcon = "";
-    private bool _isImageSelected;
+    
+    private bool _isImageUploaded; 
+    private bool _isDraggingImage;
 
     protected override void OnInitialized() => HandleDragLeave();
 
@@ -48,12 +55,14 @@
     {
         _linkColor = _color.Active;
         _imgIcon = _icon.Active;
+        _isDraggingImage = true;
     }
 
     private void HandleDragLeave()
     {
         _linkColor = _color.Default;
         _imgIcon = _icon.Default;
+        _isDraggingImage = false;
     }
     
     private async Task LoadImage(InputFileChangeEventArgs e)
@@ -63,6 +72,7 @@
 
         _linkColor = _color.Default;
         _imgIcon = _icon.Default;
-        _isImageSelected = true;
+        _isImageUploaded = true;
+        _isDraggingImage = false;
     }
 }
