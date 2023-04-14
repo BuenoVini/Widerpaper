@@ -38,6 +38,23 @@ a, .btn-link {
     color: red;
 }
 
+.drop-area {
+    width: 100%;
+    height: 40vh;
+    cursor: pointer;
+    opacity: 0;
+    background-color: red;
+}
+
+#display-drop-area {
+    min-height: 40vh;
+    border: 3px dashed lightgrey;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -66,3 +83,4 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+    
