@@ -2,4 +2,5 @@
 
 using ImageManager.Services;
 
-using ImageHandler handler = new("target.png");
+using ImageHandler handler = new("target.jpg");
+handler.ToUltrawideMirroed();
