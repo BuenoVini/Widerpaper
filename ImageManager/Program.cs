@@ -2,5 +2,7 @@
 
 using ImageManager.Services;
 
-using ImageHandler handler = new("target.jpg");
+using ImageHandler handler = new();
+await handler.LoadImageAsync("target.jpg");
 handler.ToUltrawideMirrored();
+await handler.SaveImageAsync("result1.jpg");

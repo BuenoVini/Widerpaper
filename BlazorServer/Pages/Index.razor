@@ -20,7 +20,9 @@
 
     private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
     {
-        ImageHandler imageHandler = new("wwwroot/Uploads/target.jpg");
+        ImageHandler imageHandler = new();
+        await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
         await Task.Run(() => imageHandler.ToUltrawideMirrored());
+        await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
     }
 }
