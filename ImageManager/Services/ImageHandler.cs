@@ -2,25 +2,34 @@ namespace ImageManager.Services;
 
 public class ImageHandler : IDisposable
 {
-    private readonly Image<Rgba32> _imageInput;
-    private Image<Rgba32> _imageOutput;
-
-    #region Constructor and Dispose
-    public ImageHandler(string filePath)
-    {
-        _imageInput = Image.Load<Rgba32>(filePath); // TODO: turn into an async method
-        _imageOutput = new Image<Rgba32>(_imageInput.Height * 21 / 9, _imageInput.Height);
-    }
+    private Image<Rgba32>? _imageInput;
+    private Image<Rgba32>? _imageOutput;
 
     public void Dispose()
     {
-        _imageInput.Dispose();
-        _imageOutput.Dispose();
+        _imageInput?.Dispose();
+        _imageOutput?.Dispose();
     }
-    #endregion
+    
+    public async Task LoadImageAsync(string filePath)
+    {
+        _imageInput = await Image.LoadAsync<Rgba32>(filePath);
+        _imageOutput = new Image<Rgba32>(_imageInput.Height * 21 / 9, _imageInput.Height);
+    }
+
+    public async Task SaveImageAsync(string destinationPath)
+    {
+        if (_imageOutput is null)
+            throw new NullReferenceException();
+        
+        await _imageOutput.SaveAsync(destinationPath);
+    }
 
     public void ToUltrawideMirrored()
     {
+        if (_imageInput is null || _imageOutput is null)
+            throw new NullReferenceException();
+        
         /* an odd image has one extra column of pixels on the right side. so it must be treated separately */
         bool isOddImage = (_imageOutput.Width - _imageInput.Width) % 2 != 0;
         
@@ -53,7 +62,5 @@ public class ImageHandler : IDisposable
                     _imageOutput[qtyPixelsToCopy + _imageInput.Width, y] = _imageInput[_imageInput.Width - 1, y];
             }
         }
-        
-        _imageOutput.Save("wwwroot/Uploads/result.png");    // TODO: create a method for saving
     }
 }
