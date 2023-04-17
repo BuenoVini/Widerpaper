@@ -1,4 +1,5 @@
 ﻿@using BlazorServer.Components
+@using ImageManager.Services
 
 @page "/"
 
@@ -8,10 +9,18 @@
     <h1 class="mb-3 display-1 text-primary fw-bold">Welcome to Widerpaper!</h1>
     <h3 class="text-primary text-opacity-75">Convert your Widescreen wallpapers into Ultrawide!</h3>
     
-    <DragDropUploader />
+    <DragDropUploader ImageEventHandler="_imageEventHandler" />
 </div>
 
 
 @code {
-        
+    private readonly ImageEventHandler _imageEventHandler = new();
+
+    protected override void OnInitialized() => _imageEventHandler.ImageUploaded += ProcessUploadedImageAsync;
+
+    private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
+    {
+        ImageHandler imageHandler = new("wwwroot/Uploads/target.jpg");
+        await Task.Run(() => imageHandler.ToUltrawideMirrored());
+    }
 }

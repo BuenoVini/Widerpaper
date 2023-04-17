@@ -10,4 +10,8 @@
       <Folder Include="wwwroot\Uploads\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ImageManager\ImageManager.csproj" />
+    </ItemGroup>
+
 </Project>

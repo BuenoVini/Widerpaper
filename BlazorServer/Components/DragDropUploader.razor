@@ -1,3 +1,5 @@
+@using ImageManager.Services
+
 <div id="display-drop-area" class="mt-5" style="position: relative;">
     @if (_isImageUploaded == false)
     {
@@ -9,7 +11,7 @@
             @if (_isDraggingImage == false)
             {
                 <p class="mb-1"><span class="@_linkColor fw-bold">Click to browse</span> or drag an image here</p>
-                <p><small>Supports: JPEG, JPG, and PNG up to 5MB</small></p>
+                <p><small>Supports: JPEG, JPG, and PNG up to @(MaxAllowedSize)MB</small></p>
             }
             else
             {
@@ -45,6 +47,10 @@
     class Color : State { public Color(string @default, string active) : base(@default, active) {} }
     class Icon : State { public Icon(string @default, string active) : base(@default, active) {} }
 
+    [Parameter, EditorRequired] public ImageEventHandler ImageEventHandler { get; set; }
+
+        private const int MaxAllowedSize = 10;
+    
     private readonly Color _color = new ("text-primary", "text-info"); 
     private readonly Icon _icon = new ("bi-image", "bi-cloud-arrow-up-fill");
     
@@ -69,9 +75,10 @@
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
         await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
-        await e.File.OpenReadStream(5 * 1024 * 1024).CopyToAsync(stream);
+        await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
 
         SetComponentState();
         _isImageUploaded = true;
+        ImageEventHandler.OnImageUploaded();
     }
 }
