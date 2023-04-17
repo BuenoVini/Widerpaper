@@ -8,7 +8,7 @@ public class ImageHandler : IDisposable
     #region Constructor and Dispose
     public ImageHandler(string filePath)
     {
-        _imageInput = Image.Load<Rgba32>(filePath);
+        _imageInput = Image.Load<Rgba32>(filePath); // TODO: turn into an async method
         _imageOutput = new Image<Rgba32>(_imageInput.Height * 21 / 9, _imageInput.Height);
     }
 
@@ -54,6 +54,6 @@ public class ImageHandler : IDisposable
             }
         }
         
-        _imageOutput.Save("result.png");
+        _imageOutput.Save("wwwroot/Uploads/result.png");    // TODO: create a method for saving
     }
 }
