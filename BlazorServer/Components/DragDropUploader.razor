@@ -1,0 +1,84 @@
+@using ImageManager.Services
+
+<div id="display-drop-area" class="mt-5" style="position: relative;">
+    @if (_isImageUploaded == false)
+    {
+        <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
+        
+        <div class="text-muted" style="z-index: -1; position: absolute;">
+            <i class="bi @_imgIcon text-light" style="font-size: 7.5em;"></i>
+            @* <button type="button" class="btn btn-primary align-self-center mb-2">Browse</button> *@
+            @if (_isDraggingImage == false)
+            {
+                <p class="mb-1"><span class="@_linkColor fw-bold">Click to browse</span> or drag an image here</p>
+                <p><small>Supports: JPEG, JPG, and PNG up to @(MaxAllowedSize)MB</small></p>
+            }
+            else
+            {
+                <p>Drop the image to upload it</p>
+            }
+        </div>
+    }
+    else
+    {
+        <div>
+            <h3 class="mb-4 text-muted">Your image is being processed,<br>please hold on...</h3>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+
+    abstract class State
+    {
+        public readonly string Default;
+        public readonly string Active;
+
+        protected State(string @default, string active)
+        {
+            Default = @default;
+            Active = active;
+        }
+    }
+    
+    class Color : State { public Color(string @default, string active) : base(@default, active) {} }
+    class Icon : State { public Icon(string @default, string active) : base(@default, active) {} }
+
+    [Parameter, EditorRequired] public ImageEventHandler ImageEventHandler { get; set; }
+
+        private const int MaxAllowedSize = 10;
+    
+    private readonly Color _color = new ("text-primary", "text-info"); 
+    private readonly Icon _icon = new ("bi-image", "bi-cloud-arrow-up-fill");
+    
+    private string _linkColor = "";
+    private string _imgIcon = "";
+    
+    private bool _isImageUploaded; 
+    private bool _isDraggingImage;
+
+    protected override void OnInitialized() => SetComponentState();
+
+    private void HandleDragEnter() => SetComponentState(true);
+    private void HandleDragLeave() => SetComponentState();
+
+    private void SetComponentState(bool isActivated = false)
+    {
+        _linkColor = isActivated ? _color.Active : _color.Default;
+        _imgIcon = isActivated ? _icon.Active : _icon.Default;
+        _isDraggingImage = isActivated;
+    }
+
+    private async Task LoadImage(InputFileChangeEventArgs e)
+    {
+        await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
+        await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
+
+        SetComponentState();
+        _isImageUploaded = true;
+        ImageEventHandler.OnImageUploaded();
+    }
+}
