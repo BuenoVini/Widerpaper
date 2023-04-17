@@ -19,22 +19,39 @@ public class ImageHandler : IDisposable
     }
     #endregion
 
-    public void ToUltrawideMirroed()
+    public void ToUltrawideMirrored()
     {
-        int n = (_imageOutput.Width - _imageInput.Width) / 2;
+        /* an odd image has one extra column of pixels on the right side. so it must be treated separately */
+        bool isOddImage = (_imageOutput.Width - _imageInput.Width) % 2 != 0;
+        
+        /* the quantity of pixels to be mirrored copied to the side of the input image */
+        int qtyPixelsToCopy = (_imageOutput.Width - _imageInput.Width) / 2;
 
         for (int y = 0; y < _imageInput.Height; y++)
         {
-            int xOutput, xInput;
-            
-            for (xOutput = 0, xInput = n - 1; xInput >= 0; xOutput++, xInput--)
-                _imageOutput[xOutput, y] = _imageInput[xInput, y];
+            for (int x = 0; x < _imageInput.Width; x++)
+            {
+                Rgba32 currentPixel = _imageInput[x, y];
+                
+                /* copy inside the main box */
+                _imageOutput[x + qtyPixelsToCopy, y] = currentPixel;
+                
+                /* copy mirrored outside the main box */
+                if (x < qtyPixelsToCopy) 
+                {
+                    /* left side of the main box */
+                    _imageOutput[qtyPixelsToCopy - x - 1, y] = currentPixel;
+                }
+                else if (x >= _imageInput.Width - qtyPixelsToCopy)   
+                {
+                    /* right side of the main box */
+                    _imageOutput[_imageOutput.Width - (x - _imageInput.Width + qtyPixelsToCopy) - 1, y] = currentPixel;
+                }
 
-            for (xInput = 0; xInput < _imageInput.Width; xOutput++, xInput++)
-                _imageOutput[xOutput, y] = _imageInput[xInput, y];
-
-            for (xInput = _imageInput.Width - 1; xInput >= _imageInput.Width - n; xOutput++, xInput--)
-                _imageOutput[xOutput, y] = _imageInput[xInput, y];
+                /* fill missing pixel if this is an odd image */
+                if (isOddImage)
+                    _imageOutput[qtyPixelsToCopy + _imageInput.Width, y] = _imageInput[_imageInput.Width - 1, y];
+            }
         }
         
         _imageOutput.Save("result.png");
