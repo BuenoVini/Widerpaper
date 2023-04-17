@@ -3,4 +3,4 @@
 using ImageManager.Services;
 
 using ImageHandler handler = new("target.jpg");
-handler.ToUltrawideMirroed();
+handler.ToUltrawideMirrored();
