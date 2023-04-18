@@ -1,6 +1,6 @@
 @using ImageManager.Services
 
-<div id="display-drop-area" class="mt-5" style="position: relative;">
+<div id="display-drop-area" class="my-5" style="position: relative;">
     @if (_isImageUploaded == false)
     {
         <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>

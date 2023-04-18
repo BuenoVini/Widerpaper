@@ -10,11 +10,27 @@
     <h3 class="text-primary text-opacity-75">Convert your Widescreen wallpapers into Ultrawide!</h3>
     
     <DragDropUploader ImageEventHandler="_imageEventHandler" />
+    
+    @if (_isImageReady)
+    {
+        <div class="alert alert-primary d-flex align-items-center position-relative" role="alert">
+            <i class="bi bi-check-circle-fill me-2" style="font-size: 1.5em;"></i>
+            <div>
+                Your image has finished processing!
+            </div>
+            <a href="Uploads/result.jpg" download="">
+                <button type="button" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
+                    Download
+                </button>
+            </a>
+        </div>
+    }
 </div>
 
 
 @code {
     private readonly ImageEventHandler _imageEventHandler = new();
+    private bool _isImageReady;
 
     protected override void OnInitialized() => _imageEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
@@ -24,5 +40,8 @@
         await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
         await Task.Run(() => imageHandler.ToUltrawideMirrored());
         await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
+
+        _isImageReady = true;
+        await InvokeAsync(StateHasChanged);
     }
 }
