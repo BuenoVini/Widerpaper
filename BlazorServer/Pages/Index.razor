@@ -37,17 +37,17 @@
 
     private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
     {
-        await SetPageStateAsync(true);
+        await SetPageProcessingStateAsync(true);
         
         ImageHandler imageHandler = new();
         await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
         await Task.Run(() => imageHandler.ToUltrawideMirrored());
         await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
 
-        await SetPageStateAsync(false);
+        await SetPageProcessingStateAsync(false);
     }
 
-    private async Task SetPageStateAsync(bool isPageProcessing)
+    private async Task SetPageProcessingStateAsync(bool isPageProcessing)
     {
         _isImageProcessing = isPageProcessing;
         _isImageReady = !isPageProcessing;

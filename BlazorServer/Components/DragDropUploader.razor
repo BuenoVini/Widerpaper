@@ -60,16 +60,16 @@
     
     private bool _isDraggingImage;
 
-    protected override void OnInitialized() => SetComponentState();
+    protected override void OnInitialized() => SetComponentDragState();
 
-    private void HandleDragEnter() => SetComponentState(true);
-    private void HandleDragLeave() => SetComponentState();
+    private void HandleDragEnter() => SetComponentDragState(true);
+    private void HandleDragLeave() => SetComponentDragState();
 
-    private void SetComponentState(bool isActivated = false)
+    private void SetComponentDragState(bool isDragging = false)
     {
-        _linkColor = isActivated ? _color.Active : _color.Default;
-        _imgIcon = isActivated ? _icon.Active : _icon.Default;
-        _isDraggingImage = isActivated;
+        _linkColor = isDragging ? _color.Active : _color.Default;
+        _imgIcon = isDragging ? _icon.Active : _icon.Default;
+        _isDraggingImage = isDragging;
     }
 
     private async Task UploadImage(InputFileChangeEventArgs e)
@@ -77,7 +77,7 @@
         await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
         await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
 
-        SetComponentState();
+        SetComponentDragState();
         IsImageProcessing = true;
         ImageUploadEventHandler.OnImageUploaded();
     }
