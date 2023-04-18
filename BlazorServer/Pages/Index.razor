@@ -9,7 +9,7 @@
     <h1 class="mb-3 display-1 text-primary fw-bold">Welcome to Widerpaper!</h1>
     <h3 class="text-primary text-opacity-75">Convert your Widescreen wallpapers into Ultrawide!</h3>
     
-    <DragDropUploader ImageEventHandler="_imageEventHandler" />
+    <DragDropUploader ImageUploadEventHandler="_imageUploadEventHandler" />
     
     @if (_isImageReady)
     {
@@ -29,10 +29,10 @@
 
 
 @code {
-    private readonly ImageEventHandler _imageEventHandler = new();
+    private readonly ImageEventHandler _imageUploadEventHandler = new();
     private bool _isImageReady;
 
-    protected override void OnInitialized() => _imageEventHandler.ImageUploaded += ProcessUploadedImageAsync;
+    protected override void OnInitialized() => _imageUploadEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
     private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
     {
