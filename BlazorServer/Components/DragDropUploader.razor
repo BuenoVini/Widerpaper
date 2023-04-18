@@ -1,7 +1,7 @@
 @using ImageManager.Services
 
 <div id="display-drop-area" class="my-5" style="position: relative;">
-    @if (_isImageUploaded == false)
+    @if (IsImageProcessing == false)
     {
         <InputFile class="drop-area" OnChange="UploadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
         
@@ -48,6 +48,7 @@
     class Icon : State { public Icon(string @default, string active) : base(@default, active) {} }
 
     [Parameter, EditorRequired] public ImageEventHandler ImageUploadEventHandler { get; set; } = null!;
+    [Parameter] public bool IsImageProcessing { get; set; }
 
         private const int MaxAllowedSize = 10;
     
@@ -57,7 +58,6 @@
     private string _linkColor = "";
     private string _imgIcon = "";
     
-    private bool _isImageUploaded; 
     private bool _isDraggingImage;
 
     protected override void OnInitialized() => SetComponentState();
@@ -78,7 +78,7 @@
         await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
 
         SetComponentState();
-        _isImageUploaded = true;
+        IsImageProcessing = true;
         ImageUploadEventHandler.OnImageUploaded();
     }
 }
