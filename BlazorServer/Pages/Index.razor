@@ -9,20 +9,47 @@
     <h1 class="mb-3 display-1 text-primary fw-bold">Welcome to Widerpaper!</h1>
     <h3 class="text-primary text-opacity-75">Convert your Widescreen wallpapers into Ultrawide!</h3>
     
-    <DragDropUploader ImageEventHandler="_imageEventHandler" />
+    <DragDropUploader ImageUploadEventHandler="_imageUploadEventHandler" IsImageProcessing="@_isImageProcessing"/>
+    
+    @if (_isImageReady)
+    {
+        <div class="alert alert-primary d-flex align-items-center position-relative" role="alert">
+            <i class="bi bi-check-circle-fill me-2" style="font-size: 1.5em;"></i>
+            <div>
+                Your image has finished processing!
+            </div>
+            <a href="Uploads/result.jpg" download="" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
+                Download
+            </a>
+        </div>
+    }
 </div>
 
 
 @code {
-    private readonly ImageEventHandler _imageEventHandler = new();
+    private readonly ImageEventHandler _imageUploadEventHandler = new();
+    private bool _isImageReady;
+    private bool _isImageProcessing;
 
-    protected override void OnInitialized() => _imageEventHandler.ImageUploaded += ProcessUploadedImageAsync;
+    protected override void OnInitialized() => _imageUploadEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
     private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
     {
+        await SetPageProcessingStateAsync(true);
+        
         ImageHandler imageHandler = new();
         await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
         await Task.Run(() => imageHandler.ToUltrawideMirrored());
         await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
+
+        await SetPageProcessingStateAsync(false);
+    }
+
+    private async Task SetPageProcessingStateAsync(bool isPageProcessing)
+    {
+        _isImageProcessing = isPageProcessing;
+        _isImageReady = !isPageProcessing;
+        
+        await InvokeAsync(StateHasChanged);
     }
 }
