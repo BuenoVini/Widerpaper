@@ -33,7 +33,7 @@
 
     protected override void OnInitialized() => _imageUploadEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
-    private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
+    private async void ProcessUploadedImageAsync(object? sender, ImageUploadedEventArgs eventArgs)
     {
         await SetPageProcessingStateAsync(true);
         
