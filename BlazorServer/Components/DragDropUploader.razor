@@ -12,6 +12,7 @@
             {
                 <p class="mb-1"><span class="@_linkColor fw-bold">Click to browse</span> or drag an image here</p>
                 <p><small>Supports: JPEG, JPG, and PNG up to @(MaxAllowedSize)MB</small></p>
+                // TODO: get the supported files from the ImageValidationHandler.PermittedExtensions
             }
             else
             {
@@ -74,11 +75,14 @@
 
     private async Task UploadImage(InputFileChangeEventArgs e)
     {
-        await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
+        string filePath = "wwwroot/Uploads/target" + Path.GetExtension(e.File.Name);
+        
+        await using var stream = new FileStream(filePath, FileMode.Create);
         await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
 
         SetComponentDragState();
+        
         IsImageProcessing = true;
-        ImageUploadEventHandler.OnImageUploaded();
+        ImageUploadEventHandler.OnImageUploaded(filePath);
     }
 }

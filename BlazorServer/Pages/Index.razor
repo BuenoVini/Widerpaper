@@ -11,14 +11,22 @@
     
     <DragDropUploader ImageUploadEventHandler="_imageUploadEventHandler" IsImageProcessing="@_isImageProcessing"/>
     
-    @if (_isImageReady)
+    @if (!_isImageSupported)
+    {
+        <div class="alert alert-danger d-flex align-items-center position-relative" role="alert">
+            <i class="bi bi-file-earmark-x-fill me-2" style="font-size: 1.5em;"></i>
+            <div>
+                Couldn't process your image. <strong>Please, try again!</strong>
+            </div>
+        </div>
+    }else if (_isImageReady)
     {
         <div class="alert alert-primary d-flex align-items-center position-relative" role="alert">
             <i class="bi bi-check-circle-fill me-2" style="font-size: 1.5em;"></i>
             <div>
                 Your image has finished processing!
             </div>
-            <a href="Uploads/result.jpg" download="" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
+            <a href=@("Uploads/result" + @_fileExtension) download="" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
                 Download
             </a>
         </div>
@@ -28,19 +36,33 @@
 
 @code {
     private readonly ImageEventHandler _imageUploadEventHandler = new();
-    private bool _isImageReady;
-    private bool _isImageProcessing;
+    private bool _isImageReady, _isImageProcessing, _isImageSupported = true;
+    private string _fileExtension = "";
 
     protected override void OnInitialized() => _imageUploadEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
-    private async void ProcessUploadedImageAsync(object? sender, EventArgs eventArgs)
+    private async void ProcessUploadedImageAsync(object? sender, ImageUploadedEventArgs eventArgs)
     {
         await SetPageProcessingStateAsync(true);
-        
+
+        string filePath = eventArgs.FilePath;
+        string fileName = Path.GetFileName(filePath);
+        await using Stream fileStream = new FileStream(filePath, FileMode.Open);
+
         ImageHandler imageHandler = new();
-        await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
-        await Task.Run(() => imageHandler.ToUltrawideMirrored());
-        await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
+        _isImageSupported = ImageValidationHandler.IsImageSupported(fileStream, fileName);
+        if (_isImageSupported)
+        {
+            await imageHandler.LoadImageAsync(fileStream);
+            await Task.Run(() => imageHandler.ToUltrawideMirrored());
+            
+            _fileExtension = Path.GetExtension(fileName);    
+            await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + _fileExtension);
+        }
+        else
+        {
+            imageHandler.DeleteImage(filePath);    
+        }
 
         await SetPageProcessingStateAsync(false);
     }
@@ -48,7 +70,7 @@
     private async Task SetPageProcessingStateAsync(bool isPageProcessing)
     {
         _isImageProcessing = isPageProcessing;
-        _isImageReady = !isPageProcessing;
+        _isImageReady = !isPageProcessing && _isImageSupported;
         
         await InvokeAsync(StateHasChanged);
     }
