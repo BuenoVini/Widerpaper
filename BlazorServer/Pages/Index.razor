@@ -11,6 +11,16 @@
     
     <DragDropUploader ImageUploadEventHandler="_imageUploadEventHandler" IsImageProcessing="@_isImageProcessing"/>
     
+    @if (!_isImageSupported)
+    {
+        <div class="alert alert-danger d-flex align-items-center position-relative" role="alert">
+            <i class="bi bi-file-earmark-x-fill me-2" style="font-size: 1.5em;"></i>
+            <div>
+                Couldn't process your image. <strong>Please, try again!</strong>
+            </div>
+        </div>
+    }
+    
     @if (_isImageReady)
     {
         <div class="alert alert-primary d-flex align-items-center position-relative" role="alert">
@@ -18,7 +28,7 @@
             <div>
                 Your image has finished processing!
             </div>
-            <a href="Uploads/result.jpg" download="" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
+            <a href=@("Uploads/result" + @_fileExtension) download="" class="me-3 btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y">
                 Download
             </a>
         </div>
@@ -28,8 +38,8 @@
 
 @code {
     private readonly ImageEventHandler _imageUploadEventHandler = new();
-    private bool _isImageReady;
-    private bool _isImageProcessing;
+    private bool _isImageReady, _isImageProcessing, _isImageSupported = true;
+    private string _fileExtension = "";
 
     protected override void OnInitialized() => _imageUploadEventHandler.ImageUploaded += ProcessUploadedImageAsync;
 
@@ -41,14 +51,17 @@
         string fileName = Path.GetFileName(filePath);
         string fileExtension = Path.GetExtension(fileName);
         await using Stream fileStream = new FileStream(filePath, FileMode.Open);
-        
-        if (!ImageValidationHandler.IsImageSupported(fileStream, fileName))
-            return; // TODO: show a toast message and remove unwanted file
-        
-        ImageHandler imageHandler = new();
-        await imageHandler.LoadImageAsync(fileStream);
-        await Task.Run(() => imageHandler.ToUltrawideMirrored());
-        await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + fileExtension);
+
+        _isImageSupported = ImageValidationHandler.IsImageSupported(fileStream, fileName);
+        if (_isImageSupported)
+        {
+            ImageHandler imageHandler = new();
+            await imageHandler.LoadImageAsync(fileStream);
+            await Task.Run(() => imageHandler.ToUltrawideMirrored());
+            await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + fileExtension);
+
+            _fileExtension = fileExtension;
+        }
 
         await SetPageProcessingStateAsync(false);
     }
@@ -56,7 +69,7 @@
     private async Task SetPageProcessingStateAsync(bool isPageProcessing)
     {
         _isImageProcessing = isPageProcessing;
-        _isImageReady = !isPageProcessing;
+        _isImageReady = !isPageProcessing && _isImageSupported;
         
         await InvokeAsync(StateHasChanged);
     }
