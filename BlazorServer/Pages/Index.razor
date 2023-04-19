@@ -19,9 +19,7 @@
                 Couldn't process your image. <strong>Please, try again!</strong>
             </div>
         </div>
-    }
-    
-    @if (_isImageReady)
+    }else if (_isImageReady)
     {
         <div class="alert alert-primary d-flex align-items-center position-relative" role="alert">
             <i class="bi bi-check-circle-fill me-2" style="font-size: 1.5em;"></i>
@@ -49,7 +47,6 @@
 
         string filePath = eventArgs.FilePath;
         string fileName = Path.GetFileName(filePath);
-        string fileExtension = Path.GetExtension(fileName);
         await using Stream fileStream = new FileStream(filePath, FileMode.Open);
 
         _isImageSupported = ImageValidationHandler.IsImageSupported(fileStream, fileName);
@@ -58,9 +55,9 @@
             ImageHandler imageHandler = new();
             await imageHandler.LoadImageAsync(fileStream);
             await Task.Run(() => imageHandler.ToUltrawideMirrored());
-            await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + fileExtension);
-
-            _fileExtension = fileExtension;
+            
+            _fileExtension = Path.GetExtension(fileName);    
+            await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + _fileExtension);
         }
 
         await SetPageProcessingStateAsync(false);
