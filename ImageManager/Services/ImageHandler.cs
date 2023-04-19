@@ -10,12 +10,20 @@ public class ImageHandler : IDisposable
         _imageInput?.Dispose();
         _imageOutput?.Dispose();
     }
+
+    public async Task LoadImageAsync(Stream fileStream)
+    {
+        _imageInput = await Image.LoadAsync<Rgba32>(fileStream);
+        _imageOutput = CreateUltrawideImage(_imageInput.Height);
+    }
     
     public async Task LoadImageAsync(string filePath)
     {
         _imageInput = await Image.LoadAsync<Rgba32>(filePath);
-        _imageOutput = new Image<Rgba32>(_imageInput.Height * 21 / 9, _imageInput.Height);
+        _imageOutput = CreateUltrawideImage(_imageInput.Height);
     }
+
+    private Image<Rgba32> CreateUltrawideImage(int baseHeight) => new(baseHeight * 21 / 9, baseHeight);
 
     public async Task SaveImageAsync(string destinationPath)
     {

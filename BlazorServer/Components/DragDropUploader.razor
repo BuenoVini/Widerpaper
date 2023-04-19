@@ -79,9 +79,6 @@
         
         await using var stream = new FileStream(filePath, FileMode.Create);
         await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
-        
-        if (!ImageValidationHandler.IsImageSupported(new FileStream(filePath, FileMode.Open), e.File.Name))
-            return; // TODO: show a toast message and remove unwanted file
 
         SetComponentDragState();
         

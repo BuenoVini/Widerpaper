@@ -36,11 +36,19 @@
     private async void ProcessUploadedImageAsync(object? sender, ImageUploadedEventArgs eventArgs)
     {
         await SetPageProcessingStateAsync(true);
+
+        string filePath = eventArgs.FilePath;
+        string fileName = Path.GetFileName(filePath);
+        string fileExtension = Path.GetExtension(fileName);
+        await using Stream fileStream = new FileStream(filePath, FileMode.Open);
+        
+        if (!ImageValidationHandler.IsImageSupported(fileStream, fileName))
+            return; // TODO: show a toast message and remove unwanted file
         
         ImageHandler imageHandler = new();
-        await imageHandler.LoadImageAsync("wwwroot/Uploads/target.jpg");
+        await imageHandler.LoadImageAsync(fileStream);
         await Task.Run(() => imageHandler.ToUltrawideMirrored());
-        await imageHandler.SaveImageAsync("wwwroot/Uploads/result.jpg");
+        await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + fileExtension);
 
         await SetPageProcessingStateAsync(false);
     }

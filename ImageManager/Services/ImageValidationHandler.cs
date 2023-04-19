@@ -23,6 +23,9 @@ public static class ImageValidationHandler
         string extension = Path.GetExtension(filePath);
 
         byte[] fileHeaderBytes = new BinaryReader(fileStream).ReadBytes(FileSignature[extension].Length);
+
+        fileStream.Position = 0;
+        
         return FileSignature[extension].SequenceEqual(fileHeaderBytes);
     }
 
