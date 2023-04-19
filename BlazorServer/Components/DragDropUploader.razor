@@ -1,7 +1,9 @@
-<div id="display-drop-area" class="mt-5" style="position: relative;">
-    @if (_isImageUploaded == false)
+@using ImageManager.Services
+
+<div id="display-drop-area" class="my-5" style="position: relative;">
+    @if (IsImageProcessing == false)
     {
-        <InputFile class="drop-area" OnChange="LoadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
+        <InputFile class="drop-area" OnChange="UploadImage" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave"/>
         
         <div class="text-muted" style="z-index: -1; position: absolute;">
             <i class="bi @_imgIcon text-light" style="font-size: 7.5em;"></i>
@@ -9,7 +11,8 @@
             @if (_isDraggingImage == false)
             {
                 <p class="mb-1"><span class="@_linkColor fw-bold">Click to browse</span> or drag an image here</p>
-                <p><small>Supports: JPEG, JPG, and PNG up to 5MB</small></p>
+                <p><small>Supports: JPEG, JPG, and PNG up to @(MaxAllowedSize)MB</small></p>
+                // TODO: get the supported files from the ImageValidationHandler.PermittedExtensions
             }
             else
             {
@@ -45,33 +48,41 @@
     class Color : State { public Color(string @default, string active) : base(@default, active) {} }
     class Icon : State { public Icon(string @default, string active) : base(@default, active) {} }
 
+    [Parameter, EditorRequired] public ImageEventHandler ImageUploadEventHandler { get; set; } = null!;
+    [Parameter] public bool IsImageProcessing { get; set; }
+
+        private const int MaxAllowedSize = 10;
+    
     private readonly Color _color = new ("text-primary", "text-info"); 
     private readonly Icon _icon = new ("bi-image", "bi-cloud-arrow-up-fill");
     
     private string _linkColor = "";
     private string _imgIcon = "";
     
-    private bool _isImageUploaded; 
     private bool _isDraggingImage;
 
-    protected override void OnInitialized() => SetComponentState();
+    protected override void OnInitialized() => SetComponentDragState();
 
-    private void HandleDragEnter() => SetComponentState(true);
-    private void HandleDragLeave() => SetComponentState();
+    private void HandleDragEnter() => SetComponentDragState(true);
+    private void HandleDragLeave() => SetComponentDragState();
 
-    private void SetComponentState(bool isActivated = false)
+    private void SetComponentDragState(bool isDragging = false)
     {
-        _linkColor = isActivated ? _color.Active : _color.Default;
-        _imgIcon = isActivated ? _icon.Active : _icon.Default;
-        _isDraggingImage = isActivated;
+        _linkColor = isDragging ? _color.Active : _color.Default;
+        _imgIcon = isDragging ? _icon.Active : _icon.Default;
+        _isDraggingImage = isDragging;
     }
 
-    private async Task LoadImage(InputFileChangeEventArgs e)
+    private async Task UploadImage(InputFileChangeEventArgs e)
     {
-        await using var stream = new FileStream("wwwroot/Uploads/target.jpg", FileMode.Create);
-        await e.File.OpenReadStream(5 * 1024 * 1024).CopyToAsync(stream);
+        string filePath = "wwwroot/Uploads/target" + Path.GetExtension(e.File.Name);
+        
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await e.File.OpenReadStream(MaxAllowedSize * 1024 * 1024).CopyToAsync(stream);
 
-        SetComponentState();
-        _isImageUploaded = true;
+        SetComponentDragState();
+        
+        IsImageProcessing = true;
+        ImageUploadEventHandler.OnImageUploaded(filePath);
     }
 }
