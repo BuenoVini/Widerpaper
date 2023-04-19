@@ -33,6 +33,8 @@ public class ImageHandler : IDisposable
         await _imageOutput.SaveAsync(destinationPath);
     }
 
+    public void DeleteImage(string filePath) => File.Delete(filePath);
+
     public void ToUltrawideMirrored()
     {
         if (_imageInput is null || _imageOutput is null)

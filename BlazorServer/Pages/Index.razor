@@ -49,15 +49,19 @@
         string fileName = Path.GetFileName(filePath);
         await using Stream fileStream = new FileStream(filePath, FileMode.Open);
 
+        ImageHandler imageHandler = new();
         _isImageSupported = ImageValidationHandler.IsImageSupported(fileStream, fileName);
         if (_isImageSupported)
         {
-            ImageHandler imageHandler = new();
             await imageHandler.LoadImageAsync(fileStream);
             await Task.Run(() => imageHandler.ToUltrawideMirrored());
             
             _fileExtension = Path.GetExtension(fileName);    
             await imageHandler.SaveImageAsync("wwwroot/Uploads/result" + _fileExtension);
+        }
+        else
+        {
+            imageHandler.DeleteImage(filePath);    
         }
 
         await SetPageProcessingStateAsync(false);
