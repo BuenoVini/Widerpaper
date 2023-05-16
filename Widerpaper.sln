@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Widerpaper", "Widerpaper.csproj", "{9E128D30-4ED2-437A-B2E8-6767A9C57936}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageManager", "ImageManager\ImageManager.csproj", "{3FAF5435-2B99-404F-8C6E-E1E8A333CB3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServer", "BlazorServer\BlazorServer.csproj", "{A1C6A5A9-FB46-40D9-8653-49EB9BECBF83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9E128D30-4ED2-437A-B2E8-6767A9C57936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E128D30-4ED2-437A-B2E8-6767A9C57936}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E128D30-4ED2-437A-B2E8-6767A9C57936}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E128D30-4ED2-437A-B2E8-6767A9C57936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FAF5435-2B99-404F-8C6E-E1E8A333CB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FAF5435-2B99-404F-8C6E-E1E8A333CB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FAF5435-2B99-404F-8C6E-E1E8A333CB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FAF5435-2B99-404F-8C6E-E1E8A333CB3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C6A5A9-FB46-40D9-8653-49EB9BECBF83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C6A5A9-FB46-40D9-8653-49EB9BECBF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C6A5A9-FB46-40D9-8653-49EB9BECBF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C6A5A9-FB46-40D9-8653-49EB9BECBF83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
