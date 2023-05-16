@@ -1,7 +1,7 @@
 # Widerpaper
 Widerpaper is a Blazor Server Application to convert standard widescreen images to ultrawide.
 
-![Widerpaper main page](https://github.com/BuenoVini/Widerpaper/assets/51279927/31891cfa-bb27-41bc-b302-6af6e3d00de9)
+![Widerpaper main page](https://github.com/BuenoVini/Widerpaper/assets/51279927/1e75f606-0b39-40d2-a9ec-386fe915f7e7)
 
 A **widescreen** image has a 16:9 aspect ratio (_e.g._ 1920x1080) whereas an **ultra widescreen** image has 21:9 aspect ratio (_e.g._ 2560x1080).
 
@@ -29,11 +29,11 @@ Widerpaper is a single page application that allows the user to upload an image 
 Even though you can still see the mirrored effect on some images, I consider the results as pretty good overall!! Even better when the background of the image is more uniform or abstract.
 | Before (16:9) | After (21:9) |
 | --- | --- |
-| ![Example 1 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/90d40676-14e3-4cd3-830a-5c30b5229fcc) | ![Example 1 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/fd7a59e9-cf6f-4f19-aa06-bb62254abde6) |
-| ![Example 2 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/38775c7e-9d34-48ad-a42b-a787723b2d3d) | ![Example 2 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/4499212f-9620-4c3b-834d-8143ced0f4ca) |
-| ![Example 3 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/f6b7edee-8af7-431a-8d4e-26b6bb034998) | ![Example 3 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/3595fa6e-fd0e-41f9-b44b-102672691c5e) |
-| ![Example 4 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/b160e74d-d0c9-4eda-8537-d6da58b60f2f) | ![Example 4 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/fe52fc2c-edd2-42d0-85b4-8f5beb624956) |
-| ![Example 5 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/cd0e5a27-3bef-424a-98dc-835c61d10d1e) | ![Example 5 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/19abba4c-0fa0-4cf1-a591-961eaef891e4) |
+| ![Example 1 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/d0581c67-4724-4142-a293-499bd6e7cd30) | ![Example 1 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/40f23fd8-9f5e-4881-bcfd-5f970277d536) |
+| ![Example 2 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/b81891c6-26a3-4f2a-8385-56eeb3351e1b) | ![Example 2 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/03f3349c-23dd-4c5b-afda-61a9188c1ce4) |
+| ![Example 3 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/813a053b-5f38-4113-8f00-dec650e9de4c) | ![Example 3 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/088fb08e-520d-4128-8c14-0c28e96c8925) |
+| ![Example 4 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/3c28f99a-6c71-4d49-bbd1-11a8462254b7) | ![Example 4 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/ef92f208-2334-4bb0-ae86-ff9dec9d64be) |
+| ![Example 5 Original](https://github.com/BuenoVini/Widerpaper/assets/51279927/68d39e96-d222-4d49-a053-874b925af875) | ![Example 5 Result](https://github.com/BuenoVini/Widerpaper/assets/51279927/7f8338c5-2801-4a34-93ec-5937949461fd) |
 
 ## Contributing
 You cannot modify nor redistribute this code without explicit permission.
